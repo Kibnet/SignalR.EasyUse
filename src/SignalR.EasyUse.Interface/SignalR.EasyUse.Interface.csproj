@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <Authors>Kibnet</Authors>
+    <RepositoryUrl>https://github.com/Kibnet/SignalR.EasyUse</RepositoryUrl>
+    <PackageProjectUrl>https://github.com/Kibnet/SignalR.EasyUse</PackageProjectUrl>
+    <PackageVersion>0.1.0</PackageVersion>
+    <Description>A framework that allows you to easily use SignalR, adhering to strict contracts out of the box.
+
+This package must be installed in the interface project.</Description>
+  </PropertyGroup>
+
+</Project>
