@@ -1,0 +1,26 @@
+name: NuGet Generation
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    types: [closed]
+    branches: [ master ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup .NET Core
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 3.1.101
+    - name: Install dependencies
+      run: dotnet restore
+    - name: Pack solution
+      run: dotnet pack --configuration Release -o out --no-restore    
+    - name: Push nuget package to Nuget registry
+      run: dotnet nuget push ./out/**/*.nupkg --skip-duplicate --no-symbols true -k ${{secrets.NUGET_TOKEN}} -s https://api.nuget.org/v3/index.json
