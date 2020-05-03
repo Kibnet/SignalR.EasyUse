@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.SignalR.Client;
@@ -39,6 +39,18 @@ namespace SignalR.EasyUse.Client
         /// <param name="connection">Cоединение с хабом, на которое подписываемся</param>
         /// <param name="action">Действие, которое будет выполняться при вызове метода клиента</param>
         public static void Subscribe<T>(this HubConnection connection, Action<T> action) where T : IClientMethod
+        {
+            SubscribeNotInherited<T>(connection, action);
+        }
+        
+        /// <summary>
+        /// Подписаться на метод клиента, чтобы при получении сообщения вызывался экшн
+        /// даже если сообщение не помечено интерфейсом-маркером
+        /// </summary>
+        /// <typeparam name="T">Тип клиентского метода</typeparam>
+        /// <param name="connection">Cоединение с хабом, на которое подписываемся</param>
+        /// <param name="action">Действие, которое будет выполняться при вызове метода клиента</param>
+        public static void SubscribeNotInherited<T>(this HubConnection connection, Action<T> action)
         {
             var recieveMessage = typeof(T);
             var methodName = recieveMessage.Name;
