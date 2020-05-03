@@ -116,3 +116,6 @@ _connection.On<string, string>("ReceiveMessage", (user, message) =>
 ## Get a sample!
 If you want to touch the working project right away, see examples of ready-made applications that use the framework:
 https://github.com/Kibnet/SignalRChat
+
+## Communication
+Any suggestions and comments are welcome. If you want to contact me, use [Telegram](https://t.me/kibnet)
