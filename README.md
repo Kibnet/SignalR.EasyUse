@@ -42,6 +42,7 @@ public class ReceiveMessage: IClientMethod
 ```
 
 ### Use interfaces in server project
+- Add a link to the project with contracts.
 - Now you need to implement your server interface. Since you are required to follow the interface description, the hub will comply with the contract.
 - Wherever you need to send messages to clients, you can now use strongly typed calls using the extension method:
 ```csharp
@@ -71,7 +72,8 @@ public class ChatHub : Hub, IChatHub
 ```
 
 ### Use interfaces in client project
-- First, create a connection to the hub, as usual:
+- Add a link to the project with contracts.
+- Сreate a connection to the hub, as usual:
 ```csharp
 _connection = new HubConnectionBuilder()
                 .WithUrl("http://localhost:53353/ChatHub")
