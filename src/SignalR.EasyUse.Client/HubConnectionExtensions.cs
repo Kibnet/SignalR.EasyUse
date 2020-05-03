@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.SignalR.Client;
@@ -14,7 +14,19 @@ namespace SignalR.EasyUse.Client
         /// <typeparam name="T">Интерфейс серверного хаба</typeparam>
         /// <param name="hubConnection">Cоединение с хабом</param>
         /// <returns>Реализация интерфейса</returns>
-        public static T CreateHub<T>(this HubConnection hubConnection) where T : class, IServerMethods
+        public static T CreateHub<T>(this HubConnection hubConnection) where T : IServerMethods
+        {
+            return CreateNotInheritedHub<T>(hubConnection);
+        }
+        
+        /// <summary>
+        /// Создать реализацию хаба из интерфейса, для вызова серверных методов
+        /// даже если интерфейс не помечен интерфейсом-маркером
+        /// </summary>
+        /// <typeparam name="T">Интерфейс серверного хаба</typeparam>
+        /// <param name="hubConnection">Cоединение с хабом</param>
+        /// <returns>Реализация интерфейса</returns>
+        public static T CreateNotInheritedHub<T>(this HubConnection hubConnection)
         {
             var hub = HubDecorator<T>.Create(async (s, objects) => { await hubConnection.InvokeCoreAsync(s, objects); });
             return hub;
