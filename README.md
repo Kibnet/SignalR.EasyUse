@@ -115,7 +115,8 @@ _connection.On<string, string>("ReceiveMessage", (user, message) =>
 
 ## Get a sample!
 If you want to touch the working project right away, see examples of ready-made applications that use the framework:
-https://github.com/Kibnet/SignalRChat
+- https://github.com/Kibnet/SignalRChat - Simple chat server on .NetCore 3.1 and 3 clients: WPF(Net 4.6.1), WPF(NetCore 3.1) and AvaloniaUI MVVM(NetCore 3.1)
+- https://github.com/Kibnet/SignalChat - Chat with a little more functionality and a beautiful design using MVVM. Server on .NetCore 3.1 and client on WPF MVVM(Net 4.6.2)
 
 ## Communication
 Any suggestions and comments are welcome. If you want to contact me, use [Telegram](https://t.me/kibnet)
