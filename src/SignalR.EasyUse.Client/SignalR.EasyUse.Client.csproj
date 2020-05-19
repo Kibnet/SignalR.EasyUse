@@ -9,7 +9,7 @@
     <Description>A framework that allows you to easily use SignalR, adhering to strict contracts out of the box.
 
 This package must be installed in the client application project.</Description>
-    <PackageIconUrl>https://docs.microsoft.com/sv-se/azure/media/index/azure-signalr.svg</PackageIconUrl>
+    <PackageIconUrl>https://raw.githubusercontent.com/Kibnet/SignalR.EasyUse/master/resources/signalr.png</PackageIconUrl>
   </PropertyGroup>
 
   <ItemGroup>
