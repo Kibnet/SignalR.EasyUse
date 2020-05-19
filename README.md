@@ -2,15 +2,23 @@
 
 <img src="https://docs.microsoft.com/sv-se/azure/media/index/azure-signalr.svg" alt="SignalR" width="180"/>
 
-![](https://github.com/Kibnet/SignalR.EasyUse/workflows/NuGet%20Generation/badge.svg?branch=master)![](https://img.shields.io/github/stars/Kibnet/SignalR.EasyUse.svg) ![](https://img.shields.io/github/forks/Kibnet/SignalR.EasyUse.svg)![](https://img.shields.io/github/issues/Kibnet/SignalR.EasyUse.svg)
- ![](https://img.shields.io/github/tag/Kibnet/SignalR.EasyUse.svg) ![](https://img.shields.io/github/release/Kibnet/SignalR.EasyUse.svg)
+![](https://github.com/Kibnet/SignalR.EasyUse/workflows/NuGet%20Generation/badge.svg?branch=master)
+![](https://img.shields.io/github/issues/Kibnet/SignalR.EasyUse.svg?label=Issues)
+![](https://img.shields.io/github/tag/Kibnet/SignalR.EasyUse.svg?label=Last%20Version)
+![GitHub last commit](https://img.shields.io/github/last-commit/kibnet/SignalR.EasyUse)
+![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/kibnet/SignalR.EasyUse?label=Code%20Size)
+
+![GitHub search hit counter](https://img.shields.io/github/search/kibnet/SignalR.EasyUse/SignalR?label=GitHub%20Search%20Hits)
+![Nuget](https://img.shields.io/nuget/dt/SignalR.EasyUse.Interface?label=Interface%20Downloads)
+![Nuget](https://img.shields.io/nuget/dt/SignalR.EasyUse.Server?label=Server%20Downloads)
+![Nuget](https://img.shields.io/nuget/dt/SignalR.EasyUse.Client?label=Client%20Downloads)
 
 ## What is it?
 This is a framework that eliminates a whole class of contract non-compliance errors when writing client and server applications in C# using [SignalR](https://github.com/SignalR/SignalR "SignalR")
 
 ## How to use?
 ### Create interface
-- Create in your solution a project in which contracts will lie.
+- Create a project in your solution that will contain contracts.
 - Add [Nuget Package](https://www.nuget.org/packages/SignalR.EasyUse.Interface/ "Nuget Package") in this project:
 ```
     Install-Package SignalR.EasyUse.Interface
