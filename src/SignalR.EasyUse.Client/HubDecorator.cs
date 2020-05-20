@@ -10,13 +10,13 @@ namespace SignalR.EasyUse.Client
     /// <typeparam name="T">Тип хаба</typeparam>
     public class HubDecorator<T> : DispatchProxy
     {
-        private Action<string, object[]> _invokeAction;
+        private Func<string, object[], object> _invokeAction;
 
         /// <inheritdoc/>
         protected override object Invoke(MethodInfo targetMethod, object[] args)
         {
-            _invokeAction.Invoke(targetMethod.Name, args);
-            return Task.FromResult<Task>(null);
+            var result =_invokeAction.Invoke(targetMethod.Name, args);
+            return Task.FromResult(result);
         }
 
         /// <summary>
@@ -24,7 +24,7 @@ namespace SignalR.EasyUse.Client
         /// </summary>
         /// <param name="invokeAction">Действие, которое будет вызываться при вызове методов</param>
         /// <returns>Декорированная реализация</returns>
-        public static T Create(Action<string, object[]> invokeAction)
+        public static T Create(Func<string, object[], Task<object>> invokeAction)
         {
             object proxy = Create<T, HubDecorator<T>>();
             ((HubDecorator<T>)proxy).SetParameters(invokeAction);
@@ -36,7 +36,7 @@ namespace SignalR.EasyUse.Client
         /// Задать параметры
         /// </summary>
         /// <param name="invokeAction">Действие, для вызова</param>
-        private void SetParameters(Action<string, object[]> invokeAction)
+        private void SetParameters(Func<string, object[], object> invokeAction)
         {
             _invokeAction = invokeAction;
         }

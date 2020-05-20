@@ -41,7 +41,7 @@ namespace SignalR.EasyUse.Server
         /// <typeparam name="T">Тип экземпляра</typeparam>
         /// <param name="instance">Экземпляр для извлечение значений свойств</param>
         /// <returns>Значения свойств</returns>
-        public static object[] GetPropertiesValues<T>(this T instance)
+        private static object[] GetPropertiesValues<T>(this T instance)
         {
             var recieveMessage = typeof(T);
             var paramsList = recieveMessage.GetProperties();
