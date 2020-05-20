@@ -28,7 +28,7 @@ namespace SignalR.EasyUse.Client
         /// <returns>Реализация интерфейса</returns>
         public static T CreateNotInheritedHub<T>(this HubConnection hubConnection)
         {
-            var hub = HubDecorator<T>.Create(async (s, objects) => { await hubConnection.InvokeCoreAsync(s, objects); });
+            var hub = HubDecorator<T>.Create(async (s, objects) => await hubConnection.InvokeCoreAsync<T>(s, objects));
             return hub;
         }
 
