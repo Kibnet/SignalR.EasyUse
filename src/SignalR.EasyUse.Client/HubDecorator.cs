@@ -1,44 +1,63 @@
 ﻿using System;
+using System.Linq;
 using System.Reflection;
-using System.Threading.Tasks;
+using System.Threading;
+using Microsoft.AspNetCore.SignalR.Client;
 
 namespace SignalR.EasyUse.Client
 {
     /// <summary>
-    /// Декоратор для хаба
+    /// Decorator for hub
     /// </summary>
-    /// <typeparam name="T">Тип хаба</typeparam>
+    /// <typeparam name="T">Type of hub</typeparam>
     public class HubDecorator<T> : DispatchProxy
     {
-        private Func<string, object[], object> _invokeAction;
+        private HubConnection _hubConnectionn;
+        private MethodInfo _genericMethodInfo;
 
         /// <inheritdoc/>
         protected override object Invoke(MethodInfo targetMethod, object[] args)
         {
-            var result =_invokeAction.Invoke(targetMethod.Name, args);
-            return Task.FromResult(result);
+            var returnType = targetMethod.ReturnType;
+            if (returnType.IsGenericType && returnType.Name == "Task`1")
+            {
+                var makedGenericMethod = _genericMethodInfo.MakeGenericMethod(returnType.GenericTypeArguments);
+                return makedGenericMethod.Invoke(null, new object[]{_hubConnectionn, targetMethod.Name, args, default(CancellationToken)});
+            }
+
+            if (!returnType.IsGenericType && returnType.Name == "Task")
+            {
+                return _hubConnectionn.InvokeCoreAsync(targetMethod.Name, args);
+            }
+
+            throw new InvalidCastException("Type must be a Task or Task<>");
         }
 
         /// <summary>
-        /// Создать декоратор
+        /// Create a decorator
         /// </summary>
-        /// <param name="invokeAction">Действие, которое будет вызываться при вызове методов</param>
-        /// <returns>Декорированная реализация</returns>
-        public static T Create(Func<string, object[], Task<object>> invokeAction)
+        /// <param name="hubConnection">Hub connection</param>
+        /// <returns>Decorated the implementation</returns>
+        public static T Create(HubConnection hubConnection)
         {
             object proxy = Create<T, HubDecorator<T>>();
-            ((HubDecorator<T>)proxy).SetParameters(invokeAction);
+            ((HubDecorator<T>)proxy).SetParameters(hubConnection);
 
             return (T)proxy;
         }
-        
+
         /// <summary>
-        /// Задать параметры
+        /// Specify the parameter
         /// </summary>
-        /// <param name="invokeAction">Действие, для вызова</param>
-        private void SetParameters(Func<string, object[], object> invokeAction)
+        /// <param name="hubConnection">Hub connection</param>
+        private void SetParameters(HubConnection hubConnection)
         {
-            _invokeAction = invokeAction;
+            _hubConnectionn = hubConnection;
+
+            //Retrieving the generic method for a call
+            var extension = typeof(Microsoft.AspNetCore.SignalR.Client.HubConnectionExtensions);
+            var methods = extension.GetMethods();
+            _genericMethodInfo = methods.First(info => info.Name == "InvokeCoreAsync" && info.IsGenericMethod);
         }
     }
 }

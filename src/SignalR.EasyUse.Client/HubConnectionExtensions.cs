@@ -9,47 +9,47 @@ namespace SignalR.EasyUse.Client
     public static class HubConnectionExtensions
     {
         /// <summary>
-        /// Создать реализацию хаба из интерфейса, для вызова серверных методов
+        /// Create a hub implementation from the interface to call server methods
         /// </summary>
-        /// <typeparam name="T">Интерфейс серверного хаба</typeparam>
-        /// <param name="hubConnection">Cоединение с хабом</param>
-        /// <returns>Реализация интерфейса</returns>
+        /// <typeparam name="T">Server hub interface</typeparam>
+        /// <param name="hubConnection">Connection to the hub</param>
+        /// <returns>Interface implementation</returns>
         public static T CreateHub<T>(this HubConnection hubConnection) where T : IServerMethods
         {
             return CreateNotInheritedHub<T>(hubConnection);
         }
         
         /// <summary>
-        /// Создать реализацию хаба из интерфейса, для вызова серверных методов
-        /// даже если интерфейс не помечен интерфейсом-маркером
+        /// Create a hub implementation from the interface to call server methods,
+        /// even if the interface is not marked with a marker
         /// </summary>
-        /// <typeparam name="T">Интерфейс серверного хаба</typeparam>
-        /// <param name="hubConnection">Cоединение с хабом</param>
-        /// <returns>Реализация интерфейса</returns>
+        /// <typeparam name="T">Server hub interface</typeparam>
+        /// <param name="hubConnection">Connection to the hub</param>
+        /// <returns>Interface implementation</returns>
         public static T CreateNotInheritedHub<T>(this HubConnection hubConnection)
         {
-            var hub = HubDecorator<T>.Create(async (s, objects) => await hubConnection.InvokeCoreAsync<T>(s, objects));
+            var hub = HubDecorator<T>.Create(hubConnection);
             return hub;
         }
 
         /// <summary>
-        /// Подписаться на метод клиента, чтобы при получении сообщения вызывался экшн
+        /// Subscribe to the client method so that an action is called when a message is received
         /// </summary>
-        /// <typeparam name="T">Тип клиентского метода</typeparam>
-        /// <param name="connection">Cоединение с хабом, на которое подписываемся</param>
-        /// <param name="action">Действие, которое будет выполняться при вызове метода клиента</param>
+        /// <typeparam name="T">Type of client method</typeparam>
+        /// <param name="connection">Connection to the hub that we subscribe to</param>
+        /// <param name="action">The action that will be executed when you call the customer</param>
         public static void Subscribe<T>(this HubConnection connection, Action<T> action) where T : IClientMethod
         {
             SubscribeNotInherited<T>(connection, action);
         }
         
         /// <summary>
-        /// Подписаться на метод клиента, чтобы при получении сообщения вызывался экшн
-        /// даже если сообщение не помечено интерфейсом-маркером
+        /// Subscribe to the client method so that an action is called when a message is received,
+        /// even if the message is not marked with a marker interface
         /// </summary>
-        /// <typeparam name="T">Тип клиентского метода</typeparam>
-        /// <param name="connection">Cоединение с хабом, на которое подписываемся</param>
-        /// <param name="action">Действие, которое будет выполняться при вызове метода клиента</param>
+        /// <typeparam name="T">Type of client method</typeparam>
+        /// <param name="connection">Connection to the hub that we subscribe to</param>
+        /// <param name="action">The action that will be executed when you call the customer</param>
         public static void SubscribeNotInherited<T>(this HubConnection connection, Action<T> action)
         {
             var recieveMessage = typeof(T);
@@ -67,11 +67,11 @@ namespace SignalR.EasyUse.Client
         }
 
         /// <summary>
-        /// Cоздать экземпляр типа и заполнить его свойства списком объектов
+        /// Create an instance of the type and fill in its properties with a list of objects
         /// </summary>
-        /// <typeparam name="T">Тип создаваемого экземпляра</typeparam>
-        /// <param name="propertyValues">Значения cвойств</param>
-        /// <returns>Созданный экземпляр</returns>
+        /// <typeparam name="T">Type of instance to create</typeparam>
+        /// <param name="propertyValues">Property values</param>
+        /// <returns>Created instance</returns>
         public static T CreateInstance<T>(this object[] propertyValues)
         {
             var recieveMessage = typeof(T);
