@@ -9,7 +9,11 @@
     <Description>A framework that allows you to easily use SignalR, adhering to strict contracts out of the box.
 
 This package must be installed in the client application project.</Description>
-    <PackageIcon>https://raw.githubusercontent.com/Kibnet/SignalR.EasyUse/master/resources/signalr.png</PackageIcon>
+    <PackageIcon>signalr.png</PackageIcon>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DocumentationFile></DocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>
@@ -25,6 +29,13 @@ This package must be installed in the client application project.</Description>
     <Reference Include="Microsoft.CSharp">
       <HintPath>C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.2\Microsoft.CSharp.dll</HintPath>
     </Reference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\..\resources\signalr.png">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
   </ItemGroup>
 
 </Project>
