@@ -25,7 +25,7 @@ This is a framework that eliminates a whole class of contract non-compliance err
 ```
 
 #### Define server methods
-- Create an interface with server methods in this project. The name of the interface methods will be passed as an identifier, and the method parameters will be passed as-is. The type of method return value must be [Task](https://docs.microsoft.com/en-us/dotnet/api/system.threading.tasks.task?view=netcore-3.1 "System.Threading.Tasks.Task").
+- Create an interface with server methods in this project. The name of the interface methods will be passed as an identifier, and the method parameters will be passed as-is. The type of method return value must be [Task](https://docs.microsoft.com/en-us/dotnet/api/system.threading.tasks.task?view=netcore-3.1 "System.Threading.Tasks.Task") or [Task\<TResult\>](https://docs.microsoft.com/en-us/dotnet/api/system.threading.tasks.task-1?view=netcore-3.1 "System.Threading.Tasks.Task-1").
 - It can be inherited from `SignalR.EasyUse.Interface.IServerMethods` so that you can easily distinguish them and use them for their intended purpose. But inheritance is not necessary.
 
 Example:
@@ -33,6 +33,7 @@ Example:
 public interface IChatHub: IServerMethods
 {
     Task SendMessage(string user, string message);
+    Task<List<User>> Login(string name, byte[] photo);
 }
 ```
 
@@ -93,10 +94,12 @@ var hub = _connection.CreateHub<IChatHub>();
 ```
 - Use a proxy to call server methods:
 ```csharp
+var users = await hub.Login(UserName, Photo);
 await hub.SendMessage(UserName, MessageText);
 ```
 This is what a call looks like without using the EasyUse framework:
 ```csharp
+var users = await connection.InvokeCoreAsync<List<User>>("Login", new object[] { UserName, Photo });
 await _connection.InvokeAsync("SendMessage", UserName, MessageText);
 ```
 - To subscribe to a message from the server use the extension method:
