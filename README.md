@@ -1,5 +1,5 @@
 # SignalR.EasyUse
-# [Перейти в русское Readme](README.RU.md)
+# [Перейти в русское Readme](README.ru.md)
 
 <img src="https://docs.microsoft.com/sv-se/azure/media/index/azure-signalr.svg" alt="SignalR" width="180"/>
 
