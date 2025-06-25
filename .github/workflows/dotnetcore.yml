@@ -1,24 +1,19 @@
-name: NuGet Generation
+name: Manual NuGet Publication
 
 on:
-  push:
-    branches: [ master ]
-  pull_request:
-    types: [closed]
-    branches: [ master ]
+  workflow_dispatch: # Allows manual triggering from the GitHub Actions UI
 
 jobs:
-  build:
-
+  publish:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
-    - name: Setup .NET Core
-      uses: actions/setup-dotnet@v1
+    - uses: actions/checkout@v4
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
       with:
-        dotnet-version: 3.1.202
-    - name: Install dependencies
+        dotnet-version: 9.0.x
+    - name: Restore dependencies
       run: dotnet restore
     - name: Pack solution
       run: dotnet pack --configuration Release -o out --no-restore    
