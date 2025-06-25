@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.SignalR.Client;
 using SignalR.EasyUse.Interface;
@@ -38,9 +40,29 @@ namespace SignalR.EasyUse.Client
         /// <typeparam name="T">Type of client method</typeparam>
         /// <param name="connection">Connection to the hub that we subscribe to</param>
         /// <param name="action">The action that will be executed when you call the customer</param>
-        public static void Subscribe<T>(this HubConnection connection, Action<T> action) where T : IClientMethod
+        public static IDisposable Subscribe<T>(this HubConnection connection, Action<T> action) where T : IClientMethod
         {
-            SubscribeNotInherited<T>(connection, action);
+           return SubscribeNotInherited<T>(connection, action);
+        }
+
+        public static void Unsubscribe<T>(this HubConnection connection)
+        {
+            var recieveMessage = typeof(T);
+            var methodName = recieveMessage.Name;
+            connection.Remove(methodName);
+        }
+
+        public static void UnsubscribeAll(this HubConnection connection)
+        {
+            var type = connection.GetType();
+            var fieldInfo = type.GetField("_handlers", BindingFlags.NonPublic | BindingFlags.Instance);
+
+            dynamic handlers = fieldInfo.GetValue(connection);
+
+            if (!(handlers is IDictionary dict)) return;
+
+            var keys = dict.Keys;
+            foreach (string key in keys) connection.Remove(key);
         }
         
         /// <summary>
@@ -50,7 +72,7 @@ namespace SignalR.EasyUse.Client
         /// <typeparam name="T">Type of client method</typeparam>
         /// <param name="connection">Connection to the hub that we subscribe to</param>
         /// <param name="action">The action that will be executed when you call the customer</param>
-        public static void SubscribeNotInherited<T>(this HubConnection connection, Action<T> action)
+        public static IDisposable SubscribeNotInherited<T>(this HubConnection connection, Action<T> action)
         {
             var recieveMessage = typeof(T);
             var methodName = recieveMessage.Name;
@@ -58,12 +80,14 @@ namespace SignalR.EasyUse.Client
                 .Select((info) => info.PropertyType)
                 .ToArray();
 
-            connection.On(methodName, paramsList,
-                objects =>
-                {
-                    var instance = objects.CreateInstance<T>();
-                    return Task.FromResult(action.DynamicInvoke(instance));
-                });
+            IDisposable subscription = connection.On(methodName, paramsList, (object[] args) =>
+            {
+                T instance = args.CreateInstance<T>();
+                action(instance);
+                return Task.CompletedTask;
+            });
+
+            return subscription;
         }
 
         /// <summary>
